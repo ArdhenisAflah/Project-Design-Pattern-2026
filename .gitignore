@@ -1,0 +1,47 @@
+# --- Compiled Binaries & Libraries ---
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dll
+*.dylib
+
+# --- Build Directories ---
+[Bb]in/
+[Ob]j/
+build/
+cmake-build-debug/
+cmake-build-release/
+x64/
+x86/
+
+# --- Dependency Management ---
+vcpkg_installed/
+.conan/
+
+# --- IDE & Editor Specifics ---
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.user
+*.suo
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# CLion / JetBrains
+.idea/
+
+# --- Temporary & Log Files ---
+*.log
+*.tmp
+*.swp
+.DS_Store
