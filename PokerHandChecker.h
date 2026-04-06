@@ -12,7 +12,10 @@ enum class HandRank
     FULL_HOUSE,
     FOUR_OF_A_KIND,
     STRAIGHT_FLUSH,
-    ROYAL_FLUSH
+    ROYAL_FLUSH,
+    FIVE_OF_A_KIND,
+    FLUSH_HOUSE,
+    FLUSH_FIVE
 };
 
 class PokerHandChecker

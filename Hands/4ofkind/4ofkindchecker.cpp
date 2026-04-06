@@ -1,19 +1,19 @@
 #include <iostream>
-#include "FourOfAKindChecker.h"
+#include "4ofkindchecker.h"
 
 HandRank FourOfAKindChecker::check(const Hand &hand)
 {
     if (isFourOfAKind(hand))
     {
         std::cout << "Detected FOUR OF A KIND\n";
-        return true;
+        return HandRank::FOUR_OF_A_KIND;
     }
 
     if (nextChecker)
     {
         return nextChecker->check(hand);
     }
-    return false;
+    return HandRank::HIGH_CARD;
 }
 
 bool FourOfAKindChecker::isFourOfAKind(const Hand &hand)
