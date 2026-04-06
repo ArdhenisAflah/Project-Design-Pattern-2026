@@ -11,7 +11,7 @@ HandRank FlushHouseChecker::check(const Hand &hand)
 
     if (nextChecker)
     {
-        nextChecker->check(hand);
+        return nextChecker->check(hand);
     }
     return HandRank::HIGH_CARD;
 }

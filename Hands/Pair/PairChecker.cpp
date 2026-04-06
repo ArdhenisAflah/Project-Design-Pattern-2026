@@ -8,6 +8,11 @@ HandRank PairChecker::check(const Hand &hand)
         std::cout << "Detected PAIR\n";
         return HandRank::PAIR;
     }
+
+    if (nextChecker)
+    {
+        return nextChecker->check(hand);
+    }
     return HandRank::HIGH_CARD;
 }
 
