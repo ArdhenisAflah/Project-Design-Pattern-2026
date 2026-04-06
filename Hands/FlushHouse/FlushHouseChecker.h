@@ -4,6 +4,6 @@
 class FlushHouseChecker : public PokerHandChecker
 {
 public:
-    bool check(const Hand &hand) override;
+    HandRank check(const Hand &hand) override;
     bool isFLushHouse(const Hand &hand);
 };

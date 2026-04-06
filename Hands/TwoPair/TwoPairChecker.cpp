@@ -18,5 +18,5 @@ HandRank TwoPairChecker::check(const Hand &hand)
 
 bool TwoPairChecker::isTwoPair(const Hand &hand)
 {
-    return true;
+    return hand.value == 3;
 }

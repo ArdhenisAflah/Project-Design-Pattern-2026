@@ -18,5 +18,5 @@ HandRank FourOfAKindChecker::check(const Hand &hand)
 
 bool FourOfAKindChecker::isFourOfAKind(const Hand &hand)
 {
-    return true;
+     return hand.value == 8;
 }

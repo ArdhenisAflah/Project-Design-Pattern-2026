@@ -18,5 +18,5 @@ HandRank HighCardChecker::check(const Hand &hand)
 
 bool HighCardChecker::isHighCard(const Hand &hand)
 {
-    return true;
+    return hand.value == 1;
 }

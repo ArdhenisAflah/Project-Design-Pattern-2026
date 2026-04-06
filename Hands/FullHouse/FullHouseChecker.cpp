@@ -18,5 +18,5 @@ HandRank FullHouseChecker::check(const Hand &hand)
 
 bool FullHouseChecker::isFullHouse(const Hand &hand)
 {
-    return true;
+    return hand.value == 7;
 }

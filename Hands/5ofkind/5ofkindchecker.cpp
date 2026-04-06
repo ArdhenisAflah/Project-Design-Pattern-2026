@@ -18,5 +18,5 @@ HandRank FiveOfAKindChecker::check(const Hand &hand)
 
 bool FiveOfAKindChecker::isFiveOfAKind(const Hand &hand)
 {
-    return true;
+    return hand.value == 11;
 }

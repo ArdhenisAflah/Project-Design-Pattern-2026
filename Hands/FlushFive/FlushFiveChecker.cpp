@@ -18,5 +18,5 @@ HandRank FlushFiveChecker::check(const Hand &hand)
 
 bool FlushFiveChecker::isFlushFiveChecker(const Hand &hand)
 {
-    return true;
+    return hand.value == 13;
 }

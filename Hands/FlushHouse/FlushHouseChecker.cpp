@@ -1,17 +1,22 @@
 #include <iostream>
 #include "FlushHouseChecker.h"
 
-bool FlushHouseChecker::check(const Hand &hand)
+HandRank FlushHouseChecker::check(const Hand &hand)
 {
     if (isFLushHouse(hand))
     {
         std::cout << "Detected FLUSH HOUSE\n";
-        return true;
+        return HandRank::FLUSH_HOUSE;
     }
-    return false;
+
+    if (nextChecker)
+    {
+        nextChecker->check(hand);
+    }
+    return HandRank::HIGH_CARD;
 }
 
 bool FlushHouseChecker::isFLushHouse(const Hand &hand)
 {
-    return true;
+    return hand.value == 12;
 }

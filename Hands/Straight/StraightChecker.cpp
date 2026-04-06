@@ -18,5 +18,5 @@ HandRank StraightChecker::check(const Hand &hand)
 
 bool StraightChecker::isStraight(const Hand &hand)
 {
-    return true;
+    return hand.value == 5;
 }

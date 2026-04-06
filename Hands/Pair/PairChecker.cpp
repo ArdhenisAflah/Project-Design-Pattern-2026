@@ -1,17 +1,17 @@
 #include <iostream>
 #include "PairChecker.h"
 
-bool PairChecker::check(const Hand &hand)
+HandRank PairChecker::check(const Hand &hand)
 {
     if (isPair(hand))
     {
         std::cout << "Detected PAIR\n";
-        return true;
+        return HandRank::PAIR;
     }
-    return false;
+    return HandRank::HIGH_CARD;
 }
 
 bool PairChecker::isPair(const Hand &hand)
 {
-    return true;
+    return hand.value == 2;
 }

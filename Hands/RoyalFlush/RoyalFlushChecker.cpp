@@ -13,5 +13,5 @@ bool RoyalFlushChecker::check(const Hand &hand)
 
 bool RoyalFlushChecker::isRoyalFlush(const Hand &hand)
 {
-    return true;
+    return hand.value == 10;
 }

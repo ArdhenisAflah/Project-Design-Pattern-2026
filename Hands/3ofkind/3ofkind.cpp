@@ -13,5 +13,5 @@ HandRank ThreeOfAKindChecker::check(const Hand &hand)
 
 bool ThreeOfAKindChecker::isThreeOfAKind(const Hand &hand)
 {
-    return true;
+    return hand.value == 4;
 }

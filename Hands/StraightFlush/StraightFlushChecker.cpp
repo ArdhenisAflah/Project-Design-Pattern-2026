@@ -18,5 +18,5 @@ HandRank StraightFlushChecker::check(const Hand &hand)
 
 bool StraightFlushChecker::isStraightFlush(const Hand &hand)
 {
-    return true;
+    return hand.value == 9;
 }
