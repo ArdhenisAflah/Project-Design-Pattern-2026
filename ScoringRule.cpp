@@ -53,6 +53,8 @@ int ScoringRule::convertRankToScore(HandRank rank)
         return 100;
     case HandRank::FLUSH_HOUSE:
         return 110;
+    case HandRank::FLUSH_FIVE:
+        return 120;
     default:
         return 5;
     }
