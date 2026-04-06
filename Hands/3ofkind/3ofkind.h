@@ -3,6 +3,6 @@
 class ThreeOfAKindChecker : public PokerHandChecker
 {
 public:
-    bool check(const Hand &hand) override;
+    HandRank check(const Hand &hand) override;
     bool isThreeOfAKind(const Hand &hand);
 };
