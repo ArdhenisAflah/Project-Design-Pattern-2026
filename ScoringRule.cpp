@@ -2,31 +2,30 @@
 #include "ScoringRule.h"
 ScoringRule::ScoringRule()
 {
-    highcardchecker.setNext(&pairchecker);
-    pairchecker.setNext(&twopairchecker);
-    twopairchecker.setNext(&threeofkindchecker);
-    threeofkindchecker.setNext(&straightchecker);
-    straightchecker.setNext(&flushchecker);
-    flushchecker.setNext(&fullhousechecker);
-    fullhousechecker.setNext(&fourofkindchecker);
-    fourofkindchecker.setNext(&straightflushchecker);
-    straightflushchecker.setNext(&royalflushchecker);
-    royalflushchecker.setNext(&fiveofkindchecker);
+    flushfivechecker.setNext(&fiveofkindchecker);
     fiveofkindchecker.setNext(&flushhousechecker);
-    flushhousechecker.setNext(&flushfivechecker);
+    flushhousechecker.setNext(&royalflushchecker);
+    royalflushchecker.setNext(&straightflushchecker);
+    straightflushchecker.setNext(&fourofkindchecker);
+    fourofkindchecker.setNext(&fullhousechecker);
+    fullhousechecker.setNext(&flushchecker);
+    flushchecker.setNext(&straightchecker);
+    straightchecker.setNext(&threeofkindchecker);
+    threeofkindchecker.setNext(&twopairchecker);
+    twopairchecker.setNext(&pairchecker);
+    pairchecker.setNext(&highcardchecker);
 }
 
 int ScoringRule::scoreHand(const Hand &hand)
 {
     std::cout << "Calculating hand score...\n";
-    HandRank rank = highcardchecker.check(hand);
+    HandRank rank = flushfivechecker.check(hand);
     int score = convertRankToScore(rank);
     std::cout << "Final score = " << score << "\n";
     return score;
 }
 int ScoringRule::convertRankToScore(HandRank rank)
 {
-
     switch (rank)
     {
     case HandRank::HIGH_CARD:
