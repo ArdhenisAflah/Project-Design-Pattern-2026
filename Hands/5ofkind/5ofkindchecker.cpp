@@ -1,5 +1,6 @@
 #include <iostream>
 #include "5ofkindchecker.h"
+#include <map>
 
 HandRank FiveOfAKindChecker::check(const Hand &hand)
 {
@@ -18,5 +19,20 @@ HandRank FiveOfAKindChecker::check(const Hand &hand)
 
 bool FiveOfAKindChecker::isFiveOfAKind(const Hand &hand)
 {
-    return hand.value == 11;
+    if (hand.cards.size() < 5)
+        return false;
+
+    std::map<Rank, int> rankCount;
+    for (const auto &card : hand.cards)
+    {
+        rankCount[card.rank]++;
+    }
+
+    for (const auto &entryData : rankCount)
+    {
+        if (entryData.second >= 5)
+            return true;
+    }
+
+    return false;
 }
