@@ -76,11 +76,11 @@ Hand HandGenerator::generateHand()
 
 
     // For testing purposes, we will create a hand with a known combination
-    // hand.cards.push_back({Rank::ACE, Suit::HEARTS});
-    // hand.cards.push_back({Rank::TWO, Suit::DIAMONDS});
-    // hand.cards.push_back({Rank::THREE, Suit::CLUBS});
+    // hand.cards.push_back({Rank::ACE, Suit::SPADES});
+    // hand.cards.push_back({Rank::TWO, Suit::SPADES});
+    // hand.cards.push_back({Rank::THREE, Suit::SPADES});
     // hand.cards.push_back({Rank::FOUR, Suit::SPADES});
-    // hand.cards.push_back({Rank::FIVE, Suit::HEARTS});
+    // hand.cards.push_back({Rank::FIVE, Suit::SPADES});
 
     return hand;
 }
