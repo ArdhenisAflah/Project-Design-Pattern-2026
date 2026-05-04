@@ -1,15 +1,24 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include "GameManager.h"
+
 void GameManager::runSession()
 {
     std::cout << "=== Run Started ===\n";
     Hand hand = handGenerator.generateHand();
-    std::cout << "HAND GENERATED: " << std::endl;
+
+    // Optimasi Mekanik: Sort kartu dari yang tertinggi ke terendah (UX & Logic)
+    std::sort(hand.cards.begin(), hand.cards.end(), [](const Card &a, const Card &b) {
+        return static_cast<int>(a.rank) > static_cast<int>(b.rank);
+    });
+
+    std::cout << "HAND GENERATED (Sorted): " << std::endl;
 
     std::cout << "=======================" << std::endl;
-    for (const auto &s : hand.cards)
+    for (size_t i = 0; i < hand.cards.size(); ++i)
     {
+        const auto &s = hand.cards[i];
         std::string rankConverted;
         std::string suitConverted;
 
@@ -70,12 +79,17 @@ void GameManager::runSession()
             rankConverted = "K";
             break;
         }
-        std::cout << rankConverted << "::" << suitConverted << std::endl;
+        std::cout << "[" << i << "] " << rankConverted << "::" << suitConverted << std::endl;
     }
     std::cout << "=======================" << std::endl;
 
     handPlayer.playHand(hand);
     Hand choosedHand = handPlayer.getChoosenHand();
+
+    // Optimasi Mekanik: Sort kartu pilihan agar rapi saat dinilai
+    std::sort(choosedHand.cards.begin(), choosedHand.cards.end(), [](const Card &a, const Card &b) {
+        return static_cast<int>(a.rank) > static_cast<int>(b.rank);
+    });
 
     std::cout << "YOU CHOOSED : " << std::endl;
     std::cout << "=======================" << std::endl;
