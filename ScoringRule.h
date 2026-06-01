@@ -13,7 +13,7 @@
 #include "Hands/StraightFlush/StraightFlushChecker.h"
 #include "Hands/RoyalFlush/RoyalFlushChecker.h"
 #include "Hands/FullHouse/FullHouseChecker.h"
-
+#include "JokerManager.h"
 class ScoringRule
 {
 public:
@@ -21,6 +21,7 @@ public:
     int scoreHand(const Hand &hand);
 
 private:
+    JokerManager jokerManager;
     HighCardChecker highcardchecker;
     PairChecker pairchecker;
     TwoPairChecker twopairchecker;

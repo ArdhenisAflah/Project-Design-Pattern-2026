@@ -1,13 +1,34 @@
 #include <iostream>
-#include <cstdlib> // For rand() and srand()
-#include <ctime>   // For time()
+#include <algorithm> // For std::shuffle
+#include <random>    // For std::mt19937, std::random_device
 #include "HandGenerator.h"
+
 Hand HandGenerator::generateHand()
 {
     std::cout << "Generating cards for player...\n";
-    std::srand(std::time(0)); // Seed with current time
+
+    // Build full 52-card deck
+    std::vector<Card> deck;
+    deck.reserve(52);
+
+    const Suit suits[] = {Suit::HEARTS, Suit::DIAMONDS, Suit::CLUBS, Suit::SPADES};
+    const Rank ranks[] = {
+        Rank::ACE, Rank::TWO, Rank::THREE, Rank::FOUR, Rank::FIVE,
+        Rank::SIX, Rank::SEVEN, Rank::EIGHT, Rank::NINE, Rank::TEN,
+        Rank::JACK, Rank::QUEEN, Rank::KING};
+
+    for (const Suit &suit : suits)
+        for (const Rank &rank : ranks)
+            deck.push_back({rank, suit});
+
+    // Shuffle using Mersenne Twister
+    std::mt19937 rng(std::random_device{}());
+    std::shuffle(deck.begin(), deck.end(), rng);
+
+    // 8 cards
     Hand hand;
     for (int i = 0; i < 8; i++)
+<<<<<<< Updated upstream
     {
         int randomRank = std::rand() % 13 + 1; // Range 1 to 13
         int randomSuit = std::rand() % 4 + 1;  // Range 1 to 4
@@ -73,5 +94,9 @@ Hand HandGenerator::generateHand()
         }
         hand.cards.push_back({rankConverted, suitConverted});
     }
+=======
+        hand.cards.push_back(deck[i]);
+
+>>>>>>> Stashed changes
     return hand;
 }

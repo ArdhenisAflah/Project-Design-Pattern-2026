@@ -5,7 +5,16 @@ void GameManager::runSession()
 {
     std::cout << "=== Run Started ===\n";
     Hand hand = handGenerator.generateHand();
+<<<<<<< Updated upstream
     std::cout << "HAND GENERATED: " << std::endl;
+=======
+
+    // Optimasi Mekanik: Sort kartu dari yang tertinggi ke terendah (UX & Logic)
+    std::sort(hand.cards.begin(), hand.cards.end(), [](const Card &a, const Card &b)
+              { return static_cast<int>(a.rank) > static_cast<int>(b.rank); });
+
+    std::cout << "HAND GENERATED (Sorted): " << std::endl;
+>>>>>>> Stashed changes
 
     std::cout << "=======================" << std::endl;
     for (const auto &s : hand.cards)
@@ -16,16 +25,16 @@ void GameManager::runSession()
         switch (s.suit)
         {
         case Suit::HEARTS:
-            suitConverted = "H";
+            suitConverted = "HEARTS";
             break;
         case Suit::DIAMONDS:
-            suitConverted = "D";
+            suitConverted = "DIAMOND";
             break;
         case Suit::CLUBS:
-            suitConverted = "C";
+            suitConverted = "CLUB";
             break;
         case Suit::SPADES:
-            suitConverted = "S";
+            suitConverted = "SPADE";
             break;
         }
         switch (s.rank)
@@ -77,6 +86,13 @@ void GameManager::runSession()
     handPlayer.playHand(hand);
     Hand choosedHand = handPlayer.getChoosenHand();
 
+<<<<<<< Updated upstream
+=======
+    // Optimasi Mekanik: Sort kartu pilihan agar rapi saat dinilai
+    std::sort(choosedHand.cards.begin(), choosedHand.cards.end(), [](const Card &a, const Card &b)
+              { return static_cast<int>(a.rank) > static_cast<int>(b.rank); });
+
+>>>>>>> Stashed changes
     std::cout << "YOU CHOOSED : " << std::endl;
     std::cout << "=======================" << std::endl;
     for (const auto &s : choosedHand.cards)
@@ -87,16 +103,16 @@ void GameManager::runSession()
         switch (s.suit)
         {
         case Suit::HEARTS:
-            suitConverted = "H";
+            suitConverted = "HEART";
             break;
         case Suit::DIAMONDS:
-            suitConverted = "D";
+            suitConverted = "DIAMOND";
             break;
         case Suit::CLUBS:
-            suitConverted = "C";
+            suitConverted = "CLUB";
             break;
         case Suit::SPADES:
-            suitConverted = "S";
+            suitConverted = "SPADE";
             break;
         }
         switch (s.rank)

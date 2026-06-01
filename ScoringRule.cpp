@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ScoringRule.h"
+
 ScoringRule::ScoringRule()
 {
     flushfivechecker.setNext(&fiveofkindchecker);
@@ -18,9 +19,11 @@ ScoringRule::ScoringRule()
 
 int ScoringRule::scoreHand(const Hand &hand)
 {
+    jokerManager.AddJoker(std::make_unique<RedJoker>());
     std::cout << "Calculating hand score...\n";
     HandRank rank = flushfivechecker.check(hand);
     int score = convertRankToScore(rank);
+    jokerManager.triggerAllJoker();
     std::cout << "Final score = " << score << "\n";
     return score;
 }
