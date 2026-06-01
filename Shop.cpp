@@ -3,6 +3,6 @@
 Shop::Shop(int &money)
 {
 }
-Shop::DisplayShop()
+void Shop::DisplayShop()
 {
 }
