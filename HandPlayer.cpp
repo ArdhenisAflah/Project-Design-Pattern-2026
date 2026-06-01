@@ -10,14 +10,21 @@ void HandPlayer::playHand(Hand &hand)
 
     while (std::cin >> choice && choice != -1)
     {
-        auto item = hand.cards[choice];
-        if (choice >= 0 && choice < (int)hand.cards.size() && this->choosenCards.size() < 5)
+        if (choice >= 0 && choice < (int)hand.cards.size())
         {
-            auto isContain = std::find_if(choosenCards.begin(), choosenCards.end(), [item](const Card &card)
-                                          { return card.suit == item.suit && card.rank == item.rank; });
-            if (isContain == choosenCards.end())
+            if (this->choosenCards.size() < 5)
             {
-                this->choosenCards.push_back(hand.cards[choice]);
+                auto item = hand.cards[choice];
+                auto isContain = std::find_if(choosenCards.begin(), choosenCards.end(), [item](const Card &card)
+                                              { return card.suit == item.suit && card.rank == item.rank; });
+                if (isContain == choosenCards.end())
+                {
+                    this->choosenCards.push_back(hand.cards[choice]);
+                }
+            }
+            else
+            {
+                std::cout << "Maksimal 5 kartu!" << std::endl;
             }
         }
         else

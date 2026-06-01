@@ -15,17 +15,50 @@ ScoringRule::ScoringRule()
     threeofkindchecker.setNext(&twopairchecker);
     twopairchecker.setNext(&pairchecker);
     pairchecker.setNext(&highcardchecker);
+
+    // Initialize levels
+    handLevels[HandRank::HIGH_CARD] = 0;
+    handLevels[HandRank::PAIR] = 0;
+    handLevels[HandRank::TWO_PAIR] = 0;
+    handLevels[HandRank::THREE_OF_A_KIND] = 0;
+    handLevels[HandRank::STRAIGHT] = 0;
+    handLevels[HandRank::FLUSH] = 0;
+    handLevels[HandRank::FULL_HOUSE] = 0;
+    handLevels[HandRank::FOUR_OF_A_KIND] = 0;
+    handLevels[HandRank::STRAIGHT_FLUSH] = 0;
+    handLevels[HandRank::ROYAL_FLUSH] = 0;
+    handLevels[HandRank::FIVE_OF_A_KIND] = 0;
+    handLevels[HandRank::FLUSH_HOUSE] = 0;
+    handLevels[HandRank::FLUSH_FIVE] = 0;
 }
 
 int ScoringRule::scoreHand(const Hand &hand)
 {
-    jokerManager.AddJoker(std::make_unique<RedJoker>());
     std::cout << "Calculating hand score...\n";
     HandRank rank = flushfivechecker.check(hand);
-    int score = convertRankToScore(rank);
+    int baseScore = convertRankToScore(rank);
+    int levelBonus = handLevels[rank];
+    int score = baseScore + levelBonus;
+
+    if (levelBonus > 0)
+        std::cout << "Level Bonus: +" << levelBonus << "\n";
+
     jokerManager.triggerAllJoker();
     std::cout << "Final score = " << score << "\n";
     return score;
+}
+
+void ScoringRule::UpgradeHand(HandRank rank)
+{
+    handLevels[rank] += 15; // Example upgrade value
+    std::cout << "Hand upgraded! Current level bonus: " << handLevels[rank] << "\n";
+}
+
+void ScoringRule::AddJoker(const std::string& name)
+{
+    if (name.find("Red") != std::string::npos)
+        jokerManager.AddJoker(std::make_unique<RedJoker>());
+    // Add logic for Blue Joker etc.
 }
 int ScoringRule::convertRankToScore(HandRank rank)
 {

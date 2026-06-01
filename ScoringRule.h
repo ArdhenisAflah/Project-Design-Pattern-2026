@@ -14,14 +14,21 @@
 #include "Hands/RoyalFlush/RoyalFlushChecker.h"
 #include "Hands/FullHouse/FullHouseChecker.h"
 #include "JokerManager.h"
+#include <map>
+#include <string>
+
 class ScoringRule
 {
 public:
     ScoringRule();
     int scoreHand(const Hand &hand);
+    void UpgradeHand(HandRank rank);
+    void AddJoker(const std::string& name);
 
 private:
     JokerManager jokerManager;
+    std::map<HandRank, int> handLevels;
+    // ... rest of members
     HighCardChecker highcardchecker;
     PairChecker pairchecker;
     TwoPairChecker twopairchecker;

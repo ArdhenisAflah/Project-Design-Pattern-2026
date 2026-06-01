@@ -13,6 +13,7 @@ void CardUtils::SortRank(Hand &hand)
 void CardUtils::PrintCards(Hand hand)
 {
     std::cout << "=======================" << std::endl;
+    int index = 0;
     for (const auto &s : hand.cards)
     {
         std::string rankConverted;
@@ -76,9 +77,10 @@ void CardUtils::PrintCards(Hand hand)
             break;
         }
         if (s.faceDown)
-            std::cout << "???" << std::endl;
+            std::cout << index << "| " << "???" << std::endl;
         else
-            std::cout << rankConverted << "::" << suitConverted << std::endl;
+            std::cout << index << "| " << rankConverted << "::" << suitConverted << std::endl;
+        index++;
     }
     std::cout << "=======================" << std::endl;
 }

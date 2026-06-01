@@ -6,6 +6,7 @@
 void GameManager::runSession()
 {
     bool gameOver = false;
+    shop.setMoney(playerMoney); // Link money to shop
 
     while (!gameOver)
     {
@@ -53,9 +54,14 @@ void GameManager::runSession()
                 blindCleared = true;
 
                 int reward = rewardRule.earnMoney(true, accumulatedScore);
-                std::cout << "Money gained: " << reward << "\n";
+                playerMoney += reward;
+                std::cout << "Money gained: " << reward << " | Current Money: $" << playerMoney << "\n";
 
                 blindSystem.HandlePlay();
+
+                // Show Shop after clearing blind
+                shop.GenerateShop();
+                shop.DisplayShop(scoringRule); 
             }
             else
             {
@@ -80,7 +86,7 @@ void GameManager::runSession()
                     currentHand.cards.push_back(c);
 
                 if (!refill.cards.empty())
-                    std::cout << "Hand refilled with " << (int)refill.cards.size() << " new card(s).\n";
+                    std::cout << "Hand refill: " << (int)refill.cards.size() << " card(s).\n";
 
                 attemptsUsed++;
             }

@@ -2,10 +2,12 @@
 #include "RewardRule.h"
 int RewardRule::earnMoney(bool win, int score)
 {
-    std::cout << "Calculating reward...\n";
     if (win)
     {
-        return score;
+        // Base reward for winning plus a small bonus based on score
+        int baseReward = 4;
+        int scoreBonus = score / 50; 
+        return baseReward + scoreBonus;
     }
     return 0;
 }

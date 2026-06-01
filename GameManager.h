@@ -8,6 +8,8 @@
 #include "RewardSystem/RewardCommand.h"
 #include "CardUtils.h"
 
+#include "Shop.h"
+
 class GameManager
 {
 public:
@@ -16,6 +18,7 @@ public:
     // Runtime session state
     int totalScore = 0;
     int currentAnte = 1;
+    int playerMoney = 4; // Starting money
 
     void runSession();
     void addReward(std::unique_ptr<RewardCommand> cmd);
@@ -29,4 +32,5 @@ private:
     RewardRule rewardRule;
     CardUtils cardUtils;
     BlindSystem blindSystem;
+    Shop shop;
 };
