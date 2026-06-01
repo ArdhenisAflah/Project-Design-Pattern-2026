@@ -1,40 +1,36 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 #include "GameManager.h"
-
 void GameManager::runSession()
 {
     std::cout << "=== Run Started ===\n";
     Hand hand = handGenerator.generateHand();
 
     // Optimasi Mekanik: Sort kartu dari yang tertinggi ke terendah (UX & Logic)
-    std::sort(hand.cards.begin(), hand.cards.end(), [](const Card &a, const Card &b) {
-        return static_cast<int>(a.rank) > static_cast<int>(b.rank);
-    });
+    std::sort(hand.cards.begin(), hand.cards.end(), [](const Card &a, const Card &b)
+              { return static_cast<int>(a.rank) > static_cast<int>(b.rank); });
 
     std::cout << "HAND GENERATED (Sorted): " << std::endl;
 
     std::cout << "=======================" << std::endl;
-    for (size_t i = 0; i < hand.cards.size(); ++i)
+    for (const auto &s : hand.cards)
     {
-        const auto &s = hand.cards[i];
         std::string rankConverted;
         std::string suitConverted;
 
         switch (s.suit)
         {
         case Suit::HEARTS:
-            suitConverted = "H";
+            suitConverted = "HEARTS";
             break;
         case Suit::DIAMONDS:
-            suitConverted = "D";
+            suitConverted = "DIAMOND";
             break;
         case Suit::CLUBS:
-            suitConverted = "C";
+            suitConverted = "CLUB";
             break;
         case Suit::SPADES:
-            suitConverted = "S";
+            suitConverted = "SPADE";
             break;
         }
         switch (s.rank)
@@ -79,7 +75,7 @@ void GameManager::runSession()
             rankConverted = "K";
             break;
         }
-        std::cout << "[" << i << "] " << rankConverted << "::" << suitConverted << std::endl;
+        std::cout << rankConverted << "::" << suitConverted << std::endl;
     }
     std::cout << "=======================" << std::endl;
 
@@ -87,9 +83,8 @@ void GameManager::runSession()
     Hand choosedHand = handPlayer.getChoosenHand();
 
     // Optimasi Mekanik: Sort kartu pilihan agar rapi saat dinilai
-    std::sort(choosedHand.cards.begin(), choosedHand.cards.end(), [](const Card &a, const Card &b) {
-        return static_cast<int>(a.rank) > static_cast<int>(b.rank);
-    });
+    std::sort(choosedHand.cards.begin(), choosedHand.cards.end(), [](const Card &a, const Card &b)
+              { return static_cast<int>(a.rank) > static_cast<int>(b.rank); });
 
     std::cout << "YOU CHOOSED : " << std::endl;
     std::cout << "=======================" << std::endl;
@@ -101,16 +96,16 @@ void GameManager::runSession()
         switch (s.suit)
         {
         case Suit::HEARTS:
-            suitConverted = "H";
+            suitConverted = "HEART";
             break;
         case Suit::DIAMONDS:
-            suitConverted = "D";
+            suitConverted = "DIAMOND";
             break;
         case Suit::CLUBS:
-            suitConverted = "C";
+            suitConverted = "CLUB";
             break;
         case Suit::SPADES:
-            suitConverted = "S";
+            suitConverted = "SPADE";
             break;
         }
         switch (s.rank)

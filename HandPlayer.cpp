@@ -1,5 +1,6 @@
 #include <iostream>
 #include "HandPlayer.h"
+#include <algorithm>
 void HandPlayer::playHand(Hand &hand)
 {
     std::cout << "Pilih indeks kartu (pisahkan dengan spasi, akhiri dengan -1):";
@@ -8,9 +9,15 @@ void HandPlayer::playHand(Hand &hand)
 
     while (std::cin >> choice && choice != -1)
     {
-        if (choice >= 0 && choice < hand.cards.size())
+        auto item = hand.cards[choice];
+        if (choice >= 0 && choice < hand.cards.size() && this->choosenCards.size() < 5)
         {
-            this->choosenCards.push_back(hand.cards[choice]);
+            auto isContain = std::find_if(choosenCards.begin(), choosenCards.end(), [item](const Card &card)
+                                          { return card.suit == item.suit && card.rank == item.rank; });
+            if (isContain == choosenCards.end())
+            {
+                this->choosenCards.push_back(hand.cards[choice]);
+            }
         }
         else
         {
