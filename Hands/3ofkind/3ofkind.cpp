@@ -1,5 +1,6 @@
 #include <iostream>
 #include "3ofkind.h"
+#include <map>
 
 HandRank ThreeOfAKindChecker::check(const Hand &hand)
 {
@@ -18,5 +19,13 @@ HandRank ThreeOfAKindChecker::check(const Hand &hand)
 
 bool ThreeOfAKindChecker::isThreeOfAKind(const Hand &hand)
 {
-    return hand.value == 4;
+    if (hand.cards.size() < 3) return false;
+    std::map<Rank, int> rankCount;
+    for (const auto &card : hand.cards) {
+        rankCount[card.rank]++;
+    }
+    for (const auto &entryData : rankCount) {
+        if (entryData.second >= 3) return true;
+    }
+    return false;
 }

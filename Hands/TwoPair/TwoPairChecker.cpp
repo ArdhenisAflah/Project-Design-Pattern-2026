@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TwoPairChecker.h"
+#include <map>
 
 HandRank TwoPairChecker::check(const Hand &hand)
 {
@@ -18,5 +19,15 @@ HandRank TwoPairChecker::check(const Hand &hand)
 
 bool TwoPairChecker::isTwoPair(const Hand &hand)
 {
-    return hand.value == 3;
+    if (hand.cards.size() < 4) return false;
+    std::map<Rank, int> rankCount;
+    for (const auto &card : hand.cards) {
+        rankCount[card.rank]++;
+    }
+    
+    int pairs = 0;
+    for (const auto &entryData : rankCount) {
+        if (entryData.second >= 2) pairs++;
+    }
+    return pairs >= 2;
 }

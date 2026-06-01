@@ -18,5 +18,8 @@ HandRank HighCardChecker::check(const Hand &hand)
 
 bool HighCardChecker::isHighCard(const Hand &hand)
 {
-    return hand.value == 1;
+    // High Card adalah kondisi default jika ada kartu di tangan 
+    // tetapi tidak membentuk kombinasi yang lebih tinggi.
+    
+    return !hand.cards.empty();
 }
