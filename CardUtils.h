@@ -4,5 +4,6 @@
 class CardUtils
 {
 public:
-    void SortRank(Hand &hands);
+    static void SortRank(Hand &hands);
+    static void PrintCards(Hand cards);
 };

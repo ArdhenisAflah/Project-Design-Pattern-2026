@@ -5,4 +5,5 @@ struct Card
 {
     Rank rank;
     Suit suit;
+    bool faceDown = false;
 };

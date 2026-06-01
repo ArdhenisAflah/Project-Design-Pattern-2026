@@ -1,14 +1,18 @@
 #include <iostream>
-#include <algorithm> // For std::shuffle
-#include <random>    // For std::mt19937, std::random_device
+#include <algorithm>
+#include <random>
 #include "HandGenerator.h"
 
-Hand HandGenerator::generateHand()
+HandGenerator::HandGenerator()
 {
-    std::cout << "Generating cards for player...\n";
+    auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    rng.seed(static_cast<unsigned int>(seed));
+    buildDeck();
+}
 
-    // Build full 52-card deck
-    std::vector<Card> deck;
+void HandGenerator::buildDeck()
+{
+    deck.clear();
     deck.reserve(52);
 
     const Suit suits[] = {Suit::HEARTS, Suit::DIAMONDS, Suit::CLUBS, Suit::SPADES};
@@ -21,14 +25,41 @@ Hand HandGenerator::generateHand()
         for (const Rank &rank : ranks)
             deck.push_back({rank, suit});
 
-    // Shuffle using Mersenne Twister
-    std::mt19937 rng(std::random_device{}());
     std::shuffle(deck.begin(), deck.end(), rng);
+}
 
-    // 8 cards
+void HandGenerator::resetDeck()
+{
+    buildDeck();
+}
+
+Hand HandGenerator::generateHand()
+{
+    std::cout << "Generating cards for player...\n";
+
+    if ((int)deck.size() < 8)
+        buildDeck();
+
     Hand hand;
     for (int i = 0; i < 8; i++)
-        hand.cards.push_back(deck[i]);
-
+    {
+        hand.cards.push_back(deck.back());
+        deck.pop_back();
+    }
     return hand;
+}
+
+Hand HandGenerator::drawCards(int n)
+{
+    if (deck.empty())
+        buildDeck();
+
+    Hand drawn;
+    int toDraw = std::min(n, (int)deck.size());
+    for (int i = 0; i < toDraw; i++)
+    {
+        drawn.cards.push_back(deck.back());
+        deck.pop_back();
+    }
+    return drawn;
 }
