@@ -19,11 +19,16 @@ struct ShopItem
     HandRank targetHand; // For Planet Cards
 };
 
+#include "PlanetCard.h"
+#include "JokerDeck.h"
+
 class Shop
 {
 private:
     int* playerMoney;
     std::vector<ShopItem> currentItems;
+    std::vector<PlanetCard> currentPlanets;
+    JokerDeck jokerDeck;
 
 public:
     Shop();
