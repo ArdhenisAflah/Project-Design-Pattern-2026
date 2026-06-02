@@ -1,3 +1,7 @@
+#pragma once
+#include "IJokerCard.h"
+#include <string>
+
 class RedJoker : public IJokerCard
 {
 private:
@@ -6,7 +10,6 @@ private:
 public:
     RedJoker(int p = 5) : power(p) {}
 
-    // Implement interface methods
     std::string getName() override
     {
         return "Red Joker";
@@ -14,5 +17,6 @@ public:
 
     void execute() override
     {
+        // Red Joker logic
     }
 };

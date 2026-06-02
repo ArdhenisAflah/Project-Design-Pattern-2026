@@ -5,14 +5,14 @@
 void JokerManager::triggerAllJoker()
 {
     std::cout << "Joker Manager All Triggered" << std::endl;
-    for (auto &item : jokerDeck)
+    for (auto &item : ownedJokers)
     {
-        std::cout << item->getName() << std::endl;
+        std::cout << "Triggering: " << item->getName() << std::endl;
+        item->execute();
     }
 }
 
 void JokerManager::AddJoker(std::unique_ptr<IJokerCard> newCard)
 {
-    // add joker tyo the vctor
-    jokerDeck.push_back(std::move(newCard));
+    ownedJokers.push_back(std::move(newCard));
 }
