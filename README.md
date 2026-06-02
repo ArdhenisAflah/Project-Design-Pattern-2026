@@ -21,14 +21,126 @@ A C++17 poker-based deck-building roguelike inspired by Balatro, featuring upgra
 *   **Command Pattern (`RewardCommand`):** Encapsulates rewards (like Skip Tags) as objects that can be queued and executed later.
 *   **Interface Pattern:** Uses `IJokerCard` for card effects and `IHandUpgrade` for hand level increments.
 
-## Building and Running
+## 1. Class Diagram (Balatro C++ Architecture)
+
+Semua komponen saling terhubung melalui `GameManager` sebagai orchestrator utama. Relasi antar pattern (State, Command, Factory, CoR) digambarkan di bawah ini:
+
+```text
++---------------------------------------------------------------------------------------------------+
+|                                          GameManager                                              |
+|     (Central Hub: Manages playerMoney, bonusHands, and executes the RewardCommand queue)          |
++-------+---------------+---------------+---------------+---------------+---------------+-----------+
+        |               |               |               |               |               |
++-------v-------+ +-----v-----+ +-------v-------+ +-----v-----+ +-------v-------+ +-----v-------+
+| HandGenerator | | HandPlayer| |  BlindSystem  | |    Shop   | |  ScoringRule  | |  RewardRule |
++-------+-------+ +-----+-----+ +-------+-------+ +-----+-----+ +-------+-------+ +-------------+
+| - deck|       |       |       | - currentState| | - items   | | - statsMap    | |- earnMoney()|
++-------+-------+       |       +-------+-------+ | - planets | +-------+-------+ +-------------+
+        |               |               |         +-----+-----+         |
+        | deals         | selects       | manages       |               | implements
+        |               |               |               | uses          | IHandUpgrade
++-------v---------------v---------------v---------------v---------------v---------------------------+
+|                                             Hand                                                  |
+|                        (Core Data: Struct containing vector of Cards)                             |
++---------------------------------------+-----------------------------------------------------------+
+                                        |
+        +-------------------------------+---------------------------------------+
+        |                               |                                       |
++-------v-------+      +----------------v-----------------+           +---------v---------+
+|  IBlindState  |      |           ScoringRule            |           |    PlanetCard     |
++---------------+      +----------------+-----------------+           +-------------------+
+| (Small, Big,  |      | - jokerManager | - checkers (CoR)|<----------| - targetHand      |
+| Boss States)  |      +--------+-------+--------+--------+           | + use(Upgrade)    |
++-------+-------+               |                |                    +---------+---------+
+        |                       | owns           | uses                         |
+        | creates               |                |                              | updates
+        |                       |                |                              |
++-------v-------+      +--------v-------+  +-----v------------+        +--------v---------+
+| RewardCommand |      |  JokerManager  |  | PokerHandChecker |        |   IHandUpgrade   |
++---------------+      +--------+-------+  +------------------+        +------------------+
+| (Skip Tags)   |      | - ownedJokers  |  | (Pair, Flush,etc)|        | + upgrade(rank)  |
++-------+-------+      +--------+-------+  +------------------+        +---------^--------+
+        |                       |                                                |
+        | queued in             | holds polymorphic objects                      | (is-a)
+        |                       |                                                |
++-------v-------+      +--------v-------+          +-------------------+         |
+|  GameManager  |      |   IJokerCard   |<---------|    JokerFactory   |         |
++---------------+      +--------+-------+          +-------------------+         |
+                       | Red, Blue, etc |          | (Registry-based)  |         |
+                       +--------+-------+          +---------+---------+         |
+                                |                            |                   |
+                                | draws from                 | registers         |
+                       +--------v-------+          +---------v---------+         |
+                       |    JokerDeck   |          |  Concrete Jokers  |---------+
+                       +----------------+          +-------------------+
+                       | - available    |
+                       +----------------+
+```
+
+## 2. Runtime Walkthrough (1 Ante Example)
+
+**Ante 1 Start**
+- `BlindSystem` generates Tags: Small (Investment), Big (Bonus Hand).
+
+**Small Blind Phase**
+```text
+=== Ante 1 - Small Blind ===
+Skip Tag for this Blind: Investment Tag ($25)
+1. Play Blind
+2. Skip Blind (Get Tag)
+Choice: 2
+Blind skipped! Tag collected.
+```
+
+**Big Blind Phase**
+```text
+=== Ante 1 - Big Blind ===
+[Tag Executed] Received $25
+Target Score: 30 | Hands: 4
+... Player plays hand, earns $4 reward ...
+Success! Target reached.
+... Shop opens ...
+```
+
+**Boss Blind Phase**
+```text
+=== Ante 1 - Boss Blind - The Hook ===
+[Effect] Discards 2 random cards after every played hand
+Target Score: 60 | Hands: 4
+... Player wins ...
+Success! Target reached.
+... Shop opens ...
+... Increment Ante to 2 ...
+```
+
+## 3. Data Lifecycle Analysis
+
+| Variable | Scope | Lifecycle | Reset/Update Logic |
+| :--- | :--- | :--- | :--- |
+| `playerMoney` | `GameManager` | Persistent (Run) | Increased by `RewardRule` or `MoneySkipReward`. Decreased in `Shop`. |
+| `currentAnte` | `BlindSystem` | Persistent (Run) | Incremented after Boss Blind is cleared or skipped. |
+| `BASE_ATTEMPTS` | `GameManager` | Constant | Default value (4) used as base for `maxAttempts`. |
+| `attemptsUsed` | `GameManager` | Local (Blind) | Resets to 0 at the start of every Played Blind. |
+| `bonusHands` | `GameManager` | Temporary (Next Blind) | Set by `BonusHandCommand`. Resets to 0 after one Played Blind. |
+| `pendingCommands`| `GameManager` | Transitory | Commands added selama `HandleSkip`. Dieksekusi/dikosongkan di awal blind berikutnya. |
+| `handStatsMap` | `ScoringRule` | Persistent (Run) | Melacak (Chips, Mult, Level) per rank. Level naik melalui `PlanetCard`. |
+| `ownedJokers` | `JokerManager`| Persistent (Run) | Ditambah via `Shop` -> `JokerFactory`. Persisten sampai akhir run (max 5). |
+| `currentState` | `BlindSystem` | Dynamic | Berubah dari Small -> Big -> Boss -> Small (next Ante). |
+
+## 4. Key Mechanics Summary
+
+*   **Scoring:** Formula: `(Base Chips + (Level-1)*10) * (Base Mult + (Level-1)*2)`.
+*   **Jokers:** Unique instances, O(1) creation melalui Factory Map Registry.
+*   **Tags:** Di-generate per Ante, dipetakan secara unik ke Small dan Big Blind.
+*   **Chain of Responsibility:** Digunakan oleh `ScoringRule` untuk mengecek rank kartu secara sekuensial dari yang tertinggi.
+
+## 5. Building and Running
 
 ### Build Command
 The project uses a batch script to compile all `.cpp` files in the directory:
 ```batch
 .\build.bat
 ```
-*Note: Ensure `poker.exe` is closed before rebuilding to avoid "Permission Denied" errors.*
 
 ### Execution
 ```batch
