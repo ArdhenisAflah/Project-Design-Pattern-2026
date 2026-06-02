@@ -14,22 +14,35 @@
 #include "Hands/RoyalFlush/RoyalFlushChecker.h"
 #include "Hands/FullHouse/FullHouseChecker.h"
 #include "JokerManager.h"
+#include "IHandUpgrade.h"
 #include <map>
 #include <string>
 
-class ScoringRule
+struct HandStats
+{
+    int baseChips;
+    int baseMult;
+    int level;
+};
+
+class ScoringRule : public IHandUpgrade
 {
 public:
     ScoringRule();
     int scoreHand(const Hand &hand);
-    void UpgradeHand(HandRank rank);
+    
+    // Implementation of IHandUpgrade
+    void upgrade(HandRank rank) override;
+    
     void AddJoker(const std::string& name);
+    int getJokerCount() const { return jokerManager.getOwnedCount(); }
 
 private:
     JokerManager jokerManager;
-    std::map<HandRank, int> handLevels;
-    // ... rest of members
+    std::map<HandRank, HandStats> handStatsMap;
+
     HighCardChecker highcardchecker;
+    // ... rest of checkers
     PairChecker pairchecker;
     TwoPairChecker twopairchecker;
     ThreeOfAKindChecker threeofkindchecker;
@@ -43,5 +56,5 @@ private:
     FlushHouseChecker flushhousechecker;
     FlushFiveChecker flushfivechecker;
 
-    int convertRankToScore(HandRank rank);
+    HandStats getBaseStats(HandRank rank);
 };
