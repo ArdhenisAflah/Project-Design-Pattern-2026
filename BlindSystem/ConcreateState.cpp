@@ -9,9 +9,11 @@ void SmallBlindState::HandlePlay(BlindSystem *system)
     system->SetState(std::make_unique<BigBlindState>());
 }
 
-void SmallBlindState::HandleSkip(BlindSystem *system)
+std::unique_ptr<RewardCommand> SmallBlindState::HandleSkip(BlindSystem *system)
 {
+    auto reward = system->CreateSkipReward();
     system->SetState(std::make_unique<BigBlindState>());
+    return reward;
 }
 
 // ── Big Blind ────────────────────────────────────────────────
@@ -32,9 +34,11 @@ void BigBlindState::HandlePlay(BlindSystem *system)
     system->SetState(randomBoss());
 }
 
-void BigBlindState::HandleSkip(BlindSystem *system)
+std::unique_ptr<RewardCommand> BigBlindState::HandleSkip(BlindSystem *system)
 {
+    auto reward = system->CreateSkipReward();
     system->SetState(randomBoss());
+    return reward;
 }
 
 // ── Boss Blind Base ──────────────────────────────────────────
@@ -44,10 +48,13 @@ void BossBlindBase::HandlePlay(BlindSystem *system)
     system->SetState(std::make_unique<SmallBlindState>());
 }
 
-void BossBlindBase::HandleSkip(BlindSystem *system)
+std::unique_ptr<RewardCommand> BossBlindBase::HandleSkip(BlindSystem *system)
 {
+    // Boss blind usually can't be skipped in Balatro, but following instructions
+    auto reward = system->CreateSkipReward();
     system->IncrementAnte();
     system->SetState(std::make_unique<SmallBlindState>());
+    return reward;
 }
 
 // ── The Hook ─────────────────────────────────────────────────

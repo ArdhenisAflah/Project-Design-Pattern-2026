@@ -8,6 +8,7 @@ public:
     Hand generateHand();
     Hand drawCards(int n);
     void resetDeck();
+    void addCardToDeck(Card card);
     HandGenerator();
 
 private:

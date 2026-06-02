@@ -33,6 +33,12 @@ void HandGenerator::resetDeck()
     buildDeck();
 }
 
+void HandGenerator::addCardToDeck(Card card)
+{
+    deck.push_back(card);
+    std::shuffle(deck.begin(), deck.end(), rng);
+}
+
 Hand HandGenerator::generateHand()
 {
     std::cout << "Generating cards for player...\n";

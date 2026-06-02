@@ -10,17 +10,43 @@ void GameManager::runSession()
 
     while (!gameOver)
     {
-        const int MAX_ATTEMPTS = 4;
+        auto *currentBlind = blindSystem.GetCurrentState();
+        bool isBoss = (currentBlind->GetName().find("Boss") != std::string::npos);
+        
+        std::cout << "\n=== Ante " << blindSystem.GetAnte() << " - " << currentBlind->GetName() << " ===\n";
+        
+        // Skip Blind Option (only for non-boss blinds)
+        if (!isBoss)
+        {
+            std::cout << "Skip Tag for this Blind: " << blindSystem.GetCurrentSkipTagName() << "\n";
+            std::cout << "1. Play Blind\n";
+            std::cout << "2. Skip Blind (Get Tag)\n";
+            std::cout << "Choice: ";
+            int skipChoice;
+            std::cin >> skipChoice;
+            if (skipChoice == 2)
+            {
+                auto reward = blindSystem.HandleSkip();
+                if (reward)
+                {
+                    addReward(std::move(reward));
+                    std::cout << "Blind skipped! Tag collected.\n";
+                }
+                continue; // Move to next blind
+            }
+        }
+
+        // Execute commands that trigger at the start of a blind
+        executeDeferredCommands();
+
+        const int BASE_ATTEMPTS = 4;
+        int maxAttempts = BASE_ATTEMPTS + bonusHands;
         int attemptsUsed = 0;
         int accumulatedScore = 0;
         bool blindCleared = false;
-
-        auto *currentBlind = blindSystem.GetCurrentState();
+        
         int targetScore = currentBlind->GetTargetScore();
-
-        std::cout << "\n=== Ante " << blindSystem.GetAnte() << " - "
-                  << currentBlind->GetName() << " ===\n";
-        std::cout << "Target Score: " << targetScore << "\n";
+        std::cout << "Target Score: " << targetScore << " | Hands: " << maxAttempts << "\n";
 
         std::string effect = currentBlind->getEffectDescription();
         if (!effect.empty())
@@ -29,9 +55,9 @@ void GameManager::runSession()
         handGenerator.resetDeck();
         Hand currentHand = handGenerator.generateHand();
 
-        while (attemptsUsed < MAX_ATTEMPTS && !blindCleared)
+        while (attemptsUsed < maxAttempts && !blindCleared)
         {
-            std::cout << "\nAttempt " << (attemptsUsed + 1) << "/" << MAX_ATTEMPTS
+            std::cout << "\nAttempt " << (attemptsUsed + 1) << "/" << maxAttempts
                       << " | Accumulated: " << accumulatedScore << "/" << targetScore << "\n";
 
             CardUtils::SortRank(currentHand);
@@ -92,6 +118,9 @@ void GameManager::runSession()
             }
         }
 
+        // Reset bonus hands after the blind
+        bonusHands = 0;
+
         if (!blindCleared)
         {
             std::cout << "GAME OVER: Failed to clear the blind.\n";
@@ -109,7 +138,10 @@ void GameManager::addReward(std::unique_ptr<RewardCommand> cmd)
 
 void GameManager::executeDeferredCommands()
 {
+    // Execute all commands in queue
     for (auto &cmd : pendingCommands)
+    {
         cmd->execute(*this);
+    }
     pendingCommands.clear();
 }

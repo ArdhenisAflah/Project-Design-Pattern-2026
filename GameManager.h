@@ -19,10 +19,12 @@ public:
     int totalScore = 0;
     int currentAnte = 1;
     int playerMoney = 4; // Starting money
+    int bonusHands = 0;
 
     void runSession();
     void addReward(std::unique_ptr<RewardCommand> cmd);
     void executeDeferredCommands();
+    HandGenerator& getHandGenerator() { return handGenerator; }
 
 private:
     HandGenerator handGenerator;

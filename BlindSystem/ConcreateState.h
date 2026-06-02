@@ -10,7 +10,7 @@ public:
     int GetTargetScore() const override { return 10; }
 
     void HandlePlay(BlindSystem *system) override;
-    void HandleSkip(BlindSystem *system) override;
+    std::unique_ptr<RewardCommand> HandleSkip(BlindSystem *system) override;
 };
 
 class BigBlindState : public IBlindState
@@ -20,7 +20,7 @@ public:
     int GetTargetScore() const override { return 30; }
 
     void HandlePlay(BlindSystem *system) override;
-    void HandleSkip(BlindSystem *system) override;
+    std::unique_ptr<RewardCommand> HandleSkip(BlindSystem *system) override;
 };
 
 // Base for all boss blinds — shared transition logic
@@ -28,7 +28,7 @@ class BossBlindBase : public IBlindState
 {
 public:
     void HandlePlay(BlindSystem *system) override;
-    void HandleSkip(BlindSystem *system) override;
+    std::unique_ptr<RewardCommand> HandleSkip(BlindSystem *system) override;
 };
 
 // The Hook: discards 2 random cards from hand after every played hand
